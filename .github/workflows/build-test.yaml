@@ -54,7 +54,7 @@ jobs:
     container:
       image: cypress/browsers:node16.16.0-chrome105-ff104-edge
       options: --user 1001
-      needs: test-build
+    needs: test-build
     strategy:
       fail-fast: false # https://github.com/cypress-io/github-action/issues/48
       matrix:
