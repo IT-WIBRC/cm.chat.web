@@ -75,7 +75,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
 #          config: "viewportWidth=375,viewportHeight=667" # for mobile test
-          start: npm run preview
+          start: npm run dev
           wait-on: http://localhost:4173
           wait-on-timeout: 120
           browser: chrome
