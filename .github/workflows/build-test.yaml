@@ -19,11 +19,6 @@ jobs:
             node-version: 16
       - run: node -v
 
-      - name: Cypress install
-        uses: cypress-io/github-action@v5
-        with:
-          runTests: false
-
       - name: Dependencies vulnerabilities
         run: npm audit
 
