@@ -76,7 +76,7 @@ jobs:
         with:
 #          config: "viewportWidth=375,viewportHeight=667" # for mobile test
           start: npm run dev
-          wait-on: http://localhost:4173
+          wait-on: http://localhost:5173
           wait-on-timeout: 120
           browser: chrome
           record: true
