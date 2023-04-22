@@ -1,0 +1,94 @@
+name: CI pipeline
+
+on:
+  push:
+    branches: [ "master"]
+  pull_request:
+    branches: [ "master"]
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+            node-version: 16
+      - run: node -v
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v5
+        with:
+          runTests: false
+
+      - name: Dependencies vulnerabilities
+        run: npm audit
+
+      - name: Initialization
+        run: npm ci
+
+      - name: Linter
+        run: npm run lint
+
+      - name: Generate service
+        run: npm run openapi-generate
+
+      - name: Unit tests
+        run: npm run test:ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Save build folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          if-no-files-found: error
+          path: build
+
+  cypress-run-chrome:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node16.16.0-chrome105-ff104-edge
+      options: --user 1001
+      needs: test-build
+    strategy:
+      fail-fast: false # https://github.com/cypress-io/github-action/issues/48
+      matrix:
+        containers: [ 1, 2 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: build
+
+      - name: Cypress info
+        run: npx cypress info
+
+      - name: Node info
+        run: node -v
+
+      - name: UI Test
+        uses: cypress-io/github-action@v5
+        with:
+#          config: "viewportWidth=375,viewportHeight=667" # for mobile test
+          start: npm run preview
+          wait-on: http://localhost:4173
+          wait-on-timeout: 120
+          browser: chrome
+          record: true
+          parallel: true
+          tag: node-${{ matrix.node }}
+          config-file: cypress.config.ts
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEBUG: "cypress:server:args"

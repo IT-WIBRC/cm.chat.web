@@ -1,2 +1,2 @@
 # cm.chat.web
-Chat app for IT
+A chat app for developer

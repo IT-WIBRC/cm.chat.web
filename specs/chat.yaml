@@ -1,0 +1,302 @@
+openapi: 3.0.3
+info:
+  title: USER Rest API
+  description: All User Rest API End Points
+  version: 0.0.1
+servers:
+  - url: '/api/v1'
+tags:
+  - name: User
+    description: Everything about the users
+paths:
+  /user/create:
+    post:
+      tags:
+        - User
+      summary: add a new user
+      description: add a new user
+      operationId: createUser
+      requestBody:
+        description: User object that need to be add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+      responses:
+        201:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+        409:
+          description: USER-409
+        406:
+          description: you have a valid session in progress
+  /user/login:
+    post:
+      tags:
+        - User
+      summary: authenticate an user
+      description: authenticate an user
+      operationId: authenticateUser
+      requestBody:
+        description: User object that need to be add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        404:
+          description: USER-404
+        406:
+          description: you have a valid session in progress
+  /user/all:
+    get:
+      tags:
+        - User
+      summary: Fetch all users
+      description: Fetch all users
+      operationId: fetAllUsers
+      parameters:
+        - name: fieldsToExtractCode
+          in: query
+          required: true
+          schema:
+            type: string
+            description: specify the fields that will be present in the response
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+        403:
+          description: expiration session
+        400:
+          description: bad request
+  /user:
+    get:
+      tags:
+        - User
+      summary: Fetch user by id
+      description: Fetch user by id
+      operationId: fetchUserById
+      parameters:
+        - name: fieldsToExtractCode
+          in: query
+          required: true
+          schema:
+            type: string
+            description: specify the fields that will be present in the response
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+        403:
+          description: expiration session
+        400:
+          description: bad request
+    put:
+      tags:
+        - User
+      summary: Update user by id
+      description: Update user by id
+      operationId: updateUserById
+      requestBody:
+        description: User object that need to be update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+      responses:
+        204:
+          description: successful operation
+        403:
+          description: expiration session
+        400:
+          description: bad request
+  /user/search/{queryString}:
+    get:
+      tags:
+        - User
+      summary: Fetch all users by user enter
+      description: Fetch all users by user enter
+      operationId: searchUsersByQuery
+      parameters:
+        - name: queryString
+          in: path
+          required: true
+          schema:
+            type: string
+            description: specify the query uses to search users
+        - name: fieldsToExtractCode
+          in: query
+          required: true
+          schema:
+            type: string
+            description: specify the fields that will be present in the response
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+        403:
+          description: expiration session
+        400:
+          description: bad request
+  /user/reset-password-request:
+    post:
+      tags:
+        - User
+      summary: Request to reset password information
+      description: Request to reset password information
+      operationId: resetPasswordRequest
+      requestBody:
+        description: User object that need to be add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+      responses:
+        200:
+          description: successful operation
+        500:
+          description: failed operation
+  /user/reset-password:
+    put:
+      tags:
+        - User
+      summary: Request to reset password information
+      description: Request to reset password information
+      operationId: resetPasswordRequest
+      requestBody:
+        description: User object that need to be add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+      responses:
+        200:
+          description: successful operation
+        500:
+          description: failed operation
+
+components:
+  schemas:
+    UserDTO:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: identifier
+          format: uuid
+        email:
+          type: string
+          description: user email
+        username:
+          type: string
+          description: username's user
+        name:
+          type: string
+          description: the name of user
+        password:
+          type: string
+          description: password's user
+        createdAt:
+          type: string
+          format: date
+          description: date of account creation
+        updateAt:
+          type: string
+          format: date
+          description: date of account modification
+        image:
+          $ref: '#/components/schemas/ImageDTO'
+    ImageDTO:
+      type: object
+      properties:
+        imageId:
+          type: string
+          format: uuid
+          description: identifier
+        title:
+          type: string
+          description: image title
+        src:
+          type: string
+          description: image source
+        description:
+          type: string
+          description: image description
+        createdAt:
+          type: string
+          format: date
+          description: image date creation
+    ConversationDTO:
+      type: object
+      properties:
+        conversationId:
+          type: string
+          format: uuid
+          description: identifier
+        name:
+          type: string
+        description:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserConversationDTO"
+        createdAt:
+          type: string
+          format: date
+    UserConversationDTO:
+      type: object
+      properties:
+        memberId:
+          type: string
+          format: uuid
+          description: identifier
+        user:
+          $ref: "#/components/schemas/UserDTO"
+        role:
+          $ref: "#/components/schemas/RoleDTO"
+        conversation:
+          $ref: "#/components/schemas/ConversationDTO"
+        join_at:
+          type: string
+          format: date
+        leave_at:
+          type: string
+          format: date
+    RoleDTO:
+      type: string
+      enum:
+        - ADMIN
+        - USER
+        - MEMBER
