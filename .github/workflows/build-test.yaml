@@ -65,9 +65,6 @@ jobs:
           name: dist
           path: dist
 
-      - name: Cypress info
-        run: npx cypress info
-
       - name: Node info
         run: node -v
 
