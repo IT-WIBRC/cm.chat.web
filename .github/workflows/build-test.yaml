@@ -35,7 +35,7 @@ jobs:
         run: npm run test:ci
 
       - name: Build
-        run: npm run build
+        run: npm run build:ci
 
       - name: Save build folder
         uses: actions/upload-artifact@v3
