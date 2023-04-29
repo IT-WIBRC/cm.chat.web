@@ -9,6 +9,15 @@ export default mergeConfig(
     test: {
       environment: "jsdom",
       exclude: [...configDefaults.exclude, "e2e/*"],
+      coverage: {
+        cleanOnRerun: true,
+        clean: true,
+        reporter: ["html", "json-summary", "json"],
+        lines: 80,
+        branches: 80,
+        functions: 80,
+        statements: 80,
+      },
       root: fileURLToPath(new URL("./", import.meta.url)),
     },
   })
