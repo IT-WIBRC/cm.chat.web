@@ -50,7 +50,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UserDTO'
       responses:
-        200:
+        201:
           description: successful operation
           content:
             application/json:
@@ -59,7 +59,7 @@ paths:
         404:
           description: USER-404
         406:
-          description: you have a valid session in progress
+          description: USER-406
   /user/all:
     get:
       tags:
@@ -237,6 +237,8 @@ components:
           description: date of account modification
         image:
           $ref: '#/components/schemas/ImageDTO'
+        token:
+          $ref: '#/components/schemas/TokenDTO'
     ImageDTO:
       type: object
       properties:
@@ -294,6 +296,19 @@ components:
         leave_at:
           type: string
           format: date
+    TokenDTO:
+      type: object
+      properties:
+        expirationDate:
+          type: string
+          format: date-time
+          description: token expiration date
+        accessToken:
+          type: string
+          description: resource access token
+        refreshToken:
+          type: string
+          description: resource use to get the new access token
     RoleDTO:
       type: string
       enum:

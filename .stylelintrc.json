@@ -22,6 +22,7 @@
       }
     ],
     "block-no-empty": null,
+    "value-no-vendor-prefix": true,
     "color-function-notation": null,
     "color-hex-case": null,
     "color-hex-length": null,

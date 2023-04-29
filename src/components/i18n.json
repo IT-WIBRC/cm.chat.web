@@ -1,0 +1,57 @@
+{
+  "messages": {
+    "en": {
+      "login": {
+        "title": "Connect with your friends and professors easily",
+        "sub_title": "Make your communication more fun...",
+        "description_desc": "Private messages and calls allow you to be yourself, talk freely and feel close to the people who matter most to you, no matter where they are in the world.",
+        "started_btn": "Get started",
+        "login_ttl": "Login in to",
+        "login_desc": "Enter your account details below.",
+        "forgot_password_ttl": "Forgot password",
+        "already_account_ttl": "Don’t have an account ?",
+        "login_btn": "Login",
+        "form": {
+          "email_lbl": "Email",
+          "email_ph": "Enter your email",
+          "password_lbl": "Password",
+          "password_ph": "Enter your password",
+          "errors": {
+            "not_found_err": "User not found",
+            "required_email": "Email is required",
+            "mustBe_email": "Please use an email here",
+            "required_password": "Password is required",
+            "characters_password": "At least 8 characters"
+          }
+        }
+      }
+    },
+    "fr": {
+      "login": {
+        "title": "Connectez-vous avec vos amis facilements",
+        "sub_title": "Rendez votre communication plus amusante",
+        "description_desc": "Les messages et appels privés vous permettent d'être vous-même, de parler librement et de vous sentir proche des personnes qui comptent le plus pour vous, où qu'elles se trouvent dans le monde.",
+        "started_btn": "commencer",
+        "login_ttl": "Connectez-vous sur",
+        "login_desc": "Remplissez vos informations plus bas.",
+        "forgot_password_ttl": "Mot de passe oublie",
+        "already_account_ttl": "Deja un compte ?",
+        "started": "Commencer",
+        "login_btn": "Se connecter",
+        "form": {
+          "email_lbl": "Email",
+          "email_ph": "Entrez votre email",
+          "password_lbl": "Mot de passe",
+          "password_ph": "Entrez votre mot de passe",
+          "errors": {
+            "not_found_err": "Utilisation inconnu",
+            "required_email": "L'Email est requise",
+            "mustBe_email": "Utilisez une email valide",
+            "required_password": "Le mot de passe est requit",
+            "characters_password": "Au moins 8 characteres"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "messages": {
+    "en": {
+      "user": {
+        "login": {
+          "errors": {
+            "not_found_err": "User not found",
+            "active_session_processing_err": "You have an active session in progress",
+            "wrong_information_err": "Wrong email or password"
+          }
+        }
+      }
+    },
+    "fr": {
+      "user": {
+        "login": {
+          "errors": {
+            "not_found_err": "Utilisation inconnu",
+            "active_session_processing_err": "Vous avez une session valide en cours",
+            "wrong_information_err": "Mauvais email ou mot de passe"
+          }
+        }
+      }
+    }
+  }
+}
