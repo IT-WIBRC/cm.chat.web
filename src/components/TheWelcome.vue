@@ -1,86 +1,54 @@
-<script setup lang="ts">
-import WelcomeItem from "./WelcomeItem.vue";
-import DocumentationIcon from "./icons/IconDocumentation.vue";
-import ToolingIcon from "./icons/IconTooling.vue";
-import EcosystemIcon from "./icons/IconEcosystem.vue";
-import CommunityIcon from "./icons/IconCommunity.vue";
-import SupportIcon from "./icons/IconSupport.vue";
-</script>
-
 <template>
-  <WelcomeItem>
-    <template #icon>
-      <DocumentationIcon />
-    </template>
-    <template #heading>Documentation</template>
-
-    Vue’s
-    <a href="https://vuejs.org/" target="_blank" rel="noopener">official documentation</a>
-    provides you with all information you need to get started.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <ToolingIcon />
-    </template>
-    <template #heading>Tooling</template>
-
-    This project is served and bundled with
-    <a href="https://vitejs.dev/guide/features.html" target="_blank" rel="noopener">Vite</a>. The
-    recommended IDE setup is
-    <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VSCode</a> +
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank" rel="noopener">Volar</a>. If
-    you need to test your components and web pages, check out
-    <a href="https://www.cypress.io/" target="_blank" rel="noopener">Cypress</a> and
-    <a href="https://on.cypress.io/component" target="_blank">Cypress Component Testing</a>.
-
-    <br />
-
-    More instructions are available in <code>README.md</code>.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <EcosystemIcon />
-    </template>
-    <template #heading>Ecosystem</template>
-
-    Get official tools and libraries for your project:
-    <a href="https://pinia.vuejs.org/" target="_blank" rel="noopener">Pinia</a>,
-    <a href="https://router.vuejs.org/" target="_blank" rel="noopener">Vue Router</a>,
-    <a href="https://test-utils.vuejs.org/" target="_blank" rel="noopener">Vue Test Utils</a>, and
-    <a href="https://github.com/vuejs/devtools" target="_blank" rel="noopener">Vue Dev Tools</a>. If
-    you need more resources, we suggest paying
-    <a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">Awesome Vue</a>
-    a visit.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <CommunityIcon />
-    </template>
-    <template #heading>Community</template>
-
-    Got stuck? Ask your question on
-    <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a>, our official
-    Discord server, or
-    <a href="https://stackoverflow.com/questions/tagged/vue.js" target="_blank" rel="noopener"
-      >StackOverflow</a
-    >. You should also subscribe to
-    <a href="https://news.vuejs.org" target="_blank" rel="noopener">our mailing list</a> and follow
-    the official
-    <a href="https://twitter.com/vuejs" target="_blank" rel="noopener">@vuejs</a>
-    twitter account for latest news in the Vue world.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <SupportIcon />
-    </template>
-    <template #heading>Support Vue</template>
-
-    As an independent project, Vue relies on community backing for its sustainability. You can help
-    us by
-    <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
-  </WelcomeItem>
+  <section class="h-full flex items-end py-10 text-white px-7 md:items-end md:py-20 md:px-20 my_bg md:bg-cover">
+    <div class="flex flex-col space-y-10 md:space-y-32">
+      <div class="space-y-3 md:space-y-6 md:mt-20 lg:space-y-2">
+        <h3 class="font-light text-xs md:text-xl lg:text-sm" data-test="sub-title">
+          {{ t("login.sub_title") }}
+        </h3>
+        <h1 class="font-semibold text-2xl w-5/6 md:text-4xl lg:w-4/5" data-test="title">
+          {{ t("login.title") }}
+        </h1>
+        <p
+          class="text-sm font-light md:text-xl md:leading-loose lg:text-base lg:pt-4"
+          data-test="description"
+        >
+          {{ t("login.description_desc") }}
+        </p>
+      </div>
+      <ButtonWrapper
+        :text="t('login.started_btn')"
+        class="font-semibold uppercase md:py-5 lg:hidden"
+        @click="$emit('openLoginForm')"
+        data-test="started"
+      />
+    </div>
+  </section>
 </template>
+
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
+
+import ButtonWrapper from "@/components/buttons/ButtonWrapper.vue";
+import i18nMessages from "@/components/i18n.json";
+
+defineEmits(["openLoginForm"]);
+
+const { t } = useI18n(i18nMessages);
+</script>
+<style scoped>
+.my_bg {
+  background-image:
+    url("../assets/try-again.png"),
+    linear-gradient(135deg, #f761a1 0%, #8c1bab 100%);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: top 20% right 40%;
+  animation: mymove 5s infinite;
+}
+
+@keyframes mymove {
+  50% {
+    background-position: top 10% right 50%;
+  }
+}
+</style>

@@ -1,4 +1,4 @@
-name: CI pipeline
+name: CI CD pipeline
 
 on:
   push:
@@ -6,9 +6,17 @@ on:
   pull_request:
     branches: [ "master", "develop"]
 
+  workflow_dispatch:
+
 permissions:
   contents: read
   pull-requests: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
 
 jobs:
   test-build:
@@ -32,7 +40,7 @@ jobs:
       - name: Linter
         run: npm run lint
 
-      - name: Generate service
+      - name: Generate service layer
         run: npm run openapi-generate
 
       - name: Unit tests
@@ -45,12 +53,12 @@ jobs:
       - name: Build
         run: npm run build:ci
 
-      - name: Save build folder
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          if-no-files-found: error
-          path: dist
+#      - name: Save build folder
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: dist
+#          if-no-files-found: error
+#          path: dist
 
   cypress-run-chrome:
     runs-on: ubuntu-latest
@@ -59,22 +67,31 @@ jobs:
       options: --user 1001
     needs: test-build
     strategy:
-      fail-fast: false # https://github.com/cypress-io/github-action/issues/48
+      fail-fast: false
       matrix:
-        containers: [ 1, 2 ]
+        containers: [ 1 ]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Download the build folders
-        uses: actions/download-artifact@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          name: dist
-          path: dist
+          node-version: 16
+      - run: node -v
 
-      - name: Node info
-        run: node -v
+      - name: Dependencies vulnerabilities
+        run: npm audit
+
+      - name: Initialization
+        run: npm ci
+
+      - name: Linter
+        run: npm run lint
+
+      - name: Generate service layer
+        run: npm run openapi-generate
 
       - name: UI Test
         uses: cypress-io/github-action@v5
@@ -91,4 +108,41 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG: "cypress:server:args"
+
+  deploy:
+    if: github.event.pull_request.base.ref == 'develop'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: cypress-run-chrome
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate service layer
+        run: npm run openapi-generate
+
+      - name: Build
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
